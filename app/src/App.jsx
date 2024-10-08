@@ -4,12 +4,14 @@ import "./App.css";
 
 const EmailGenerator = () => {
   const [emails, setEmails] = useState([]);
+  const [lifeTime, setLifetime] = useState(0);
   const [csvData, setCsvData] = useState(null);
   const [htmlTemplate, setHtmlTemplate] = useState(""); // To store user HTML input
   const [emailSubject, setEmailSubject] = useState(""); // To store the subject
   const [sampleContent, setSampleContent] = useState(""); // Store sample content for display
   const [activeTab, setActiveTab] = useState("todo"); // "todo" or "done" tab
 
+  console.log("csvData", csvData);
   // Function to handle file upload
   const handleFileUpload = (event) => {
     const file = event.target.files[0];
@@ -36,9 +38,18 @@ const EmailGenerator = () => {
     if (!csvData || !htmlTemplate) return;
 
     const emailTemplates = csvData.map((entry) => {
-      const fullName = entry.Name;
+      // const fullName = entry.Name; // Patreon Name
+      const fullName = entry?.["1. Full name"]; //Formbrick name
+      console.log("fullname", fullName);
+
       const firstName = fullName.split(" ")[0]; // Extract first name
-      const email = entry.Email; // Extract email
+      // const email = entry.Email; // Extract email from patreon
+      const email = entry?.["2. Email contact"]; // Extract email from formbrick
+      // const lifetimeAmount = entry?.["Lifetime Amount"];
+      // console.log("lifetime amount...", lifetimeAmount);
+
+      // console.log("Entry", entry["Lifetime Amount"]);
+      // setLifetime(entry["Lifetime Amount"]);
 
       // Replace placeholders with dynamic content
       let customizedTemplate = htmlTemplate;
@@ -47,7 +58,13 @@ const EmailGenerator = () => {
         firstName
       );
 
-      return { email, firstName, content: customizedTemplate, done: false };
+      return {
+        email,
+        firstName,
+        // lifetimeAmount,
+        content: customizedTemplate,
+        done: false,
+      };
     });
 
     // Set sample content for display (replace firstName in template with a generic name)
@@ -57,13 +74,16 @@ const EmailGenerator = () => {
       setSampleContent(sampleEmail);
     }
 
+    console.log("email templats...", emailTemplates);
     setEmails(emailTemplates);
   };
 
   // Function to create a mailto link for each email template
-  const sendEmail = (recipient, firstName) => {
+  const sendEmail = (recipient, firstName, lifetimeAmount = null) => {
+    console.log("sending amount", lifetimeAmount);
     const mailtoLink = `mailto:${recipient}?subject=${encodeURIComponent(
       emailSubject
+      //  + ` (Lifetime Total: ${"$" + lifetimeAmount})`
     )}&body=${encodeURIComponent(`Hello, ${firstName}!\n\n`)}`;
     window.location.href = mailtoLink; // Open the mailto link in the default email client
   };
@@ -195,7 +215,11 @@ const EmailGenerator = () => {
                   {/* Send Button */}
                   <button
                     onClick={() =>
-                      sendEmail(emailData.email, emailData.firstName)
+                      sendEmail(
+                        emailData.email,
+                        emailData.firstName,
+                        emailData["lifetimeAmount"]
+                      )
                     }
                     style={{
                       padding: "5px",
