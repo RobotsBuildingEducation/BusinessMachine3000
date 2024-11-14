@@ -39,12 +39,12 @@ const EmailGenerator = () => {
 
     const emailTemplates = csvData.map((entry) => {
       // const fullName = entry.Name; // Patreon Name
-      const fullName = entry?.["1. Full name"]; //Formbrick name
-      console.log("fullname", fullName);
+      // const fullName = entry?.["1. Full name"]; //Formbrick name
+      // console.log("fullname", fullName);
 
-      const firstName = fullName.split(" ")[0]; // Extract first name
+      // const firstName = fullName.split(" ")[0]; // Extract first name
       // const email = entry.Email; // Extract email from patreon
-      const email = entry?.["2. Email contact"]; // Extract email from formbrick
+      const email = entry?.["1. Email contact"]; // Extract email from formbrick
       // const lifetimeAmount = entry?.["Lifetime Amount"];
       // console.log("lifetime amount...", lifetimeAmount);
 
@@ -53,14 +53,14 @@ const EmailGenerator = () => {
 
       // Replace placeholders with dynamic content
       let customizedTemplate = htmlTemplate;
-      customizedTemplate = customizedTemplate.replace(
-        "${firstName}",
-        firstName
-      );
+      // customizedTemplate = customizedTemplate.replace(
+      //   "${firstName}",
+      //   firstName
+      // );
 
       return {
         email,
-        firstName,
+        // firstName,
         // lifetimeAmount,
         content: customizedTemplate,
         done: false,
@@ -69,8 +69,9 @@ const EmailGenerator = () => {
 
     // Set sample content for display (replace firstName in template with a generic name)
     if (emailTemplates.length > 0) {
-      const sampleFirstName = "John"; // Sample name for preview
-      let sampleEmail = htmlTemplate.replace("${firstName}", sampleFirstName);
+      // const sampleFirstName = "John"; // Sample name for preview
+      let sampleEmail = htmlTemplate;
+      //.replace("${firstName}", sampleFirstName);
       setSampleContent(sampleEmail);
     }
 
@@ -79,12 +80,17 @@ const EmailGenerator = () => {
   };
 
   // Function to create a mailto link for each email template
-  const sendEmail = (recipient, firstName, lifetimeAmount = null) => {
+  const sendEmail = (
+    recipient,
+    // firstName,
+    lifetimeAmount = null
+  ) => {
     console.log("sending amount", lifetimeAmount);
     const mailtoLink = `mailto:${recipient}?subject=${encodeURIComponent(
       emailSubject
       //  + ` (Lifetime Total: ${"$" + lifetimeAmount})`
-    )}&body=${encodeURIComponent(`Hello, ${firstName}!\n\n`)}`;
+    )}&body=${encodeURIComponent(`Hello! \n\n`)}`;
+    //   //  ${firstName}!\n\n`
     window.location.href = mailtoLink; // Open the mailto link in the default email client
   };
 
@@ -111,11 +117,11 @@ const EmailGenerator = () => {
           Submit an HTML template into the textbox. I recommend generating the
           HTML with ChatGPT.
         </li>
-
+        {/* 
         <li>
           Upload a CSV file/Excel sheet that contains at least "Name" and
           "Email" columns.
-        </li>
+        </li> */}
         <li>Press generate.</li>
         <li>
           Copy the content and press the send button to open your email client
@@ -208,7 +214,7 @@ const EmailGenerator = () => {
                 <div key={index}>
                   <p>
                     <strong>
-                      {emailData.firstName} ({emailData.email})
+                      {/* {emailData.firstName}  */}({emailData.email})
                     </strong>
                   </p>
 
@@ -217,7 +223,7 @@ const EmailGenerator = () => {
                     onClick={() =>
                       sendEmail(
                         emailData.email,
-                        emailData.firstName,
+                        // emailData.firstName,
                         emailData["lifetimeAmount"]
                       )
                     }
@@ -266,7 +272,7 @@ const EmailGenerator = () => {
                 <div key={index}>
                   <p>
                     <strong>
-                      {emailData.firstName} ({emailData.email})
+                      {/* {emailData.firstName}  */}({emailData.email})
                     </strong>{" "}
                     <span style={{ color: "green" }}> - Done</span>
                   </p>
