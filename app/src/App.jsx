@@ -110,192 +110,198 @@ const EmailGenerator = () => {
 
   return (
     <div>
-      <h2>Personal Email Writer</h2>
-      <h4>How to use</h4>
-      <ol style={{ fontSize: 11 }}>
-        <li>
-          Submit an HTML template into the textbox. I recommend generating the
-          HTML with ChatGPT.
-        </li>
-        {/* 
+      <h2>Hourly calculator</h2>
+      <br />
+      <br />
+      <br />
+      <>
+        <h2>Personal Email Writer</h2>
+        <h4>How to use</h4>
+        <ol style={{ fontSize: 11 }}>
+          <li>
+            Submit an HTML template into the textbox. I recommend generating the
+            HTML with ChatGPT.
+          </li>
+          {/* 
         <li>
           Upload a CSV file/Excel sheet that contains at least "Name" and
           "Email" columns.
         </li> */}
-        <li>Press generate.</li>
-        <li>
-          Copy the content and press the send button to open your email client
-          with the subject, recipient and introduction pre-filled.
-        </li>
-        <li>
-          Move the email to done.{" "}
-          <b>Warning: the todo/done list is not saved to a database. </b>
-        </li>
-      </ol>
+          <li>Press generate.</li>
+          <li>
+            Copy the content and press the send button to open your email client
+            with the subject, recipient and introduction pre-filled.
+          </li>
+          <li>
+            Move the email to done.{" "}
+            <b>Warning: the todo/done list is not saved to a database. </b>
+          </li>
+        </ol>
 
-      {/* Input for email subject */}
-      <div>
-        <label>Email Subject:</label>
-        <input
-          type="text"
-          placeholder="Enter the email subject"
-          value={emailSubject}
-          onChange={handleSubjectChange}
-          style={{ marginBottom: "20px", width: "100%" }}
-        />
-      </div>
-
-      {/* Input for the HTML template */}
-      <textarea
-        placeholder="Enter your HTML template here"
-        value={htmlTemplate}
-        onChange={handleTemplateChange}
-        style={{
-          width: "100%",
-          height: "200px",
-          marginBottom: "20px",
-          fontSize: 12,
-          fontFamily: "Helvetica",
-        }}
-      ></textarea>
-
-      {/* CSV file upload */}
-      <input type="file" accept=".csv" onChange={handleFileUpload} />
-      <button onClick={generateEmails}>Generate Emails</button>
-
-      {/* Display the sample email template */}
-      {sampleContent && (
+        {/* Input for email subject */}
         <div>
-          <h2>Email Template</h2>
-          <div
-            style={{ fontSize: 12, fontFamily: "Helvetica" }}
-            dangerouslySetInnerHTML={{ __html: sampleContent }}
+          <label>Email Subject:</label>
+          <input
+            type="text"
+            placeholder="Enter the email subject"
+            value={emailSubject}
+            onChange={handleSubjectChange}
+            style={{ marginBottom: "20px", width: "100%" }}
           />
         </div>
-      )}
 
-      {/* Tab Navigation */}
-      <div style={{ marginTop: "20px", marginBottom: "20px" }}>
-        <button
-          onClick={() => switchTab("todo")}
+        {/* Input for the HTML template */}
+        <textarea
+          placeholder="Enter your HTML template here"
+          value={htmlTemplate}
+          onChange={handleTemplateChange}
           style={{
-            padding: "10px",
-            backgroundColor: activeTab === "todo" ? "#b1b5fc" : "#95a5a6",
-            color: "white",
-            border: "none",
-            cursor: "pointer",
-            marginRight: "10px",
+            width: "100%",
+            height: "200px",
+            marginBottom: "20px",
+            fontSize: 12,
+            fontFamily: "Helvetica",
           }}
-        >
-          Todo Emails
-        </button>
-        <button
-          onClick={() => switchTab("done")}
-          style={{
-            padding: "10px",
-            backgroundColor: activeTab === "done" ? "#a1f7d3" : "#95a5a6",
-            color: "white",
-            border: "none",
-            cursor: "pointer",
-          }}
-        >
-          Done Emails
-        </button>
-      </div>
+        ></textarea>
 
-      {/* Render Todo Emails */}
-      {activeTab === "todo" &&
-        emails.filter((email) => !email.done).length > 0 && (
+        {/* CSV file upload */}
+        <input type="file" accept=".csv" onChange={handleFileUpload} />
+        <button onClick={generateEmails}>Generate Emails</button>
+
+        {/* Display the sample email template */}
+        {sampleContent && (
           <div>
-            <h2>Todo Emails</h2>
-            {emails
-              .filter((emailData) => !emailData.done)
-              .map((emailData, index) => (
-                <div key={index}>
-                  <p>
-                    <strong>
-                      {/* {emailData.firstName}  */}({emailData.email})
-                    </strong>
-                  </p>
+            <h2>Email Template</h2>
+            <div
+              style={{ fontSize: 12, fontFamily: "Helvetica" }}
+              dangerouslySetInnerHTML={{ __html: sampleContent }}
+            />
+          </div>
+        )}
 
-                  {/* Send Button */}
-                  <button
-                    onClick={() =>
-                      sendEmail(
-                        emailData.email,
-                        // emailData.firstName,
-                        emailData["lifetimeAmount"]
-                      )
-                    }
-                    style={{
-                      padding: "5px",
-                      backgroundColor: "#b1b5fc",
-                      color: "white",
-                      border: "none",
-                      cursor: "pointer",
-                    }}
-                  >
-                    Send Email to {emailData.email}
-                  </button>
+        {/* Tab Navigation */}
+        <div style={{ marginTop: "20px", marginBottom: "20px" }}>
+          <button
+            onClick={() => switchTab("todo")}
+            style={{
+              padding: "10px",
+              backgroundColor: activeTab === "todo" ? "#b1b5fc" : "#95a5a6",
+              color: "white",
+              border: "none",
+              cursor: "pointer",
+              marginRight: "10px",
+            }}
+          >
+            Todo Emails
+          </button>
+          <button
+            onClick={() => switchTab("done")}
+            style={{
+              padding: "10px",
+              backgroundColor: activeTab === "done" ? "#a1f7d3" : "#95a5a6",
+              color: "white",
+              border: "none",
+              cursor: "pointer",
+            }}
+          >
+            Done Emails
+          </button>
+        </div>
 
-                  {/* Move to End Button */}
-                  {!emailData.done && (
+        {/* Render Todo Emails */}
+        {activeTab === "todo" &&
+          emails.filter((email) => !email.done).length > 0 && (
+            <div>
+              <h2>Todo Emails</h2>
+              {emails
+                .filter((emailData) => !emailData.done)
+                .map((emailData, index) => (
+                  <div key={index}>
+                    <p>
+                      <strong>
+                        {/* {emailData.firstName}  */}({emailData.email})
+                      </strong>
+                    </p>
+
+                    {/* Send Button */}
                     <button
-                      onClick={() => moveToEnd(index)}
+                      onClick={() =>
+                        sendEmail(
+                          emailData.email,
+                          // emailData.firstName,
+                          emailData["lifetimeAmount"]
+                        )
+                      }
                       style={{
-                        marginLeft: "10px",
                         padding: "5px",
-                        backgroundColor: "#a1f7d3",
+                        backgroundColor: "#b1b5fc",
                         color: "white",
                         border: "none",
                         cursor: "pointer",
                       }}
                     >
-                      Move to Done
+                      Send Email to {emailData.email}
                     </button>
-                  )}
 
-                  <hr />
-                </div>
-              ))}
-          </div>
-        )}
+                    {/* Move to End Button */}
+                    {!emailData.done && (
+                      <button
+                        onClick={() => moveToEnd(index)}
+                        style={{
+                          marginLeft: "10px",
+                          padding: "5px",
+                          backgroundColor: "#a1f7d3",
+                          color: "white",
+                          border: "none",
+                          cursor: "pointer",
+                        }}
+                      >
+                        Move to Done
+                      </button>
+                    )}
 
-      {/* Render Done Emails */}
-      {activeTab === "done" &&
-        emails.filter((email) => email.done).length > 0 && (
-          <div>
-            <h2>Done Emails</h2>
-            {emails
-              .filter((emailData) => emailData.done)
-              .map((emailData, index) => (
-                <div key={index}>
-                  <p>
-                    <strong>
-                      {/* {emailData.firstName}  */}({emailData.email})
-                    </strong>{" "}
-                    <span style={{ color: "green" }}> - Done</span>
-                  </p>
-                  <hr />
-                </div>
-              ))}
-          </div>
-        )}
+                    <hr />
+                  </div>
+                ))}
+            </div>
+          )}
 
-      {/* Display message when no emails are available */}
-      {activeTab === "todo" &&
-        emails.filter((email) => !email.done).length === 0 && (
-          <div>
-            <h2>No Emails Left To Do</h2>
-          </div>
-        )}
+        {/* Render Done Emails */}
+        {activeTab === "done" &&
+          emails.filter((email) => email.done).length > 0 && (
+            <div>
+              <h2>Done Emails</h2>
+              {emails
+                .filter((emailData) => emailData.done)
+                .map((emailData, index) => (
+                  <div key={index}>
+                    <p>
+                      <strong>
+                        {/* {emailData.firstName}  */}({emailData.email})
+                      </strong>{" "}
+                      <span style={{ color: "green" }}> - Done</span>
+                    </p>
+                    <hr />
+                  </div>
+                ))}
+            </div>
+          )}
 
-      {activeTab === "done" &&
-        emails.filter((email) => email.done).length === 0 && (
-          <div>
-            <h2>No Done Emails</h2>
-          </div>
-        )}
+        {/* Display message when no emails are available */}
+        {activeTab === "todo" &&
+          emails.filter((email) => !email.done).length === 0 && (
+            <div>
+              <h2>No Emails Left To Do</h2>
+            </div>
+          )}
+
+        {activeTab === "done" &&
+          emails.filter((email) => email.done).length === 0 && (
+            <div>
+              <h2>No Done Emails</h2>
+            </div>
+          )}
+      </>
     </div>
   );
 };
